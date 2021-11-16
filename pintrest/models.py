@@ -25,7 +25,7 @@ class Movie(models.Model):
     productionDate = models.DateField(null=True, blank=True)
     creationDate = models.DateField(auto_now_add=True)
     modificationDate = models.DateField(auto_now=True)
-    actors = models.ManyToManyField('Actor',blank=True)
+    actors = models.ManyToManyField('Actor',blank=True,null=True)
 
     def __str__(self):
         return self.name

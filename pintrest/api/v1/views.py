@@ -1,8 +1,18 @@
-from rest_framework.decorators import api_view
+
 from rest_framework.response import Response
 from rest_framework import status
 from pintrest.models import Movie,Actor
 from pintrest.api.v1.serializers import MovieSerializer,ActorSerializer
+from rest_framework.decorators import api_view,permission_classes,authentication_classes
+
+from rest_framework.permissions import IsAuthenticated,BasePermission
+
+
+class UserCanDeleteMovie(BasePermission):
+    def has_permission(self, request, view):
+        if request.user.groups.filter(name= 'can-delete').exists():
+            return True
+        return False
 
 # this is a test function
 @api_view(["GET", "POST"]) # tells django that this is a type of rest view
@@ -29,6 +39,7 @@ def all_actors(request):
 
 
 @api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def movie_create(request):
     # print(request.POST)
     serializedmovie=MovieSerializer(data=request.POST)
@@ -46,6 +57,7 @@ def movie_create(request):
     return Response(data=the_response_data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
+
 def movie_details(request,**prams):
     try:
         mymovie= Movie.objects.get(pk= prams.get('id'))
@@ -88,6 +100,7 @@ def movie_edit(request,**prams):
 
 
 @api_view(['DELETE'])
+@permission_classes([UserCanDeleteMovie])
 def movie_delete(request,**prams):
     try:
         mymovie= Movie.objects.get(pk= prams.get('id'))

@@ -8,7 +8,7 @@ class ActorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class MovieSerializer(serializers.ModelSerializer):
-    actors = ActorSerializer(many=True)
+    actors = ActorSerializer(read_only=True, many=True)
 
     class Meta:
         model = Movie

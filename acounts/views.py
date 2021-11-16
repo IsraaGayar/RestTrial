@@ -1,12 +1,12 @@
+
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view,permission_classes,authentication_classes
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth.models import User
-from acounts.serializers import UserSerializer
 
+from rest_framework.decorators import api_view,permission_classes,authentication_classes
+from rest_framework.permissions import IsAuthenticated,BasePermission
+from acounts.serializers import UserSerializer
 from rest_framework.authtoken.models import Token
+
 
 
 
@@ -21,12 +21,13 @@ def hello_world(request):
 
 @api_view(['GET'])
 # @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def example_view(request):
     content = { 'user': str(request.user), 'auth': str(request.auth), }
     return Response(content)
 
 @api_view(['POST'])
+
 def register(request,**prams):
     # first_name= request.POST[prams.get('first_name')]
     # last_name = request.POST[prams.get('last_name')]
